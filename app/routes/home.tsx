@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import type { Route } from "./+types/home";
 import { Button } from "~/components/ui/button";
+import { exampleRoutes } from "~/constants";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -16,16 +17,18 @@ export default function Home() {
       <nav className="mt-16 px-8">
         <h2>Examples:</h2>
         <ul className="grid gap-2">
-          <li>
-            <Button
-              variant="link"
-              size="lg"
-              asChild
-              className="text-lg font-bold"
-            >
-              <Link to="">Example 1</Link>
-            </Button>
-          </li>
+          {exampleRoutes.map((e) => (
+            <li key={e.to}>
+              <Button
+                variant="link"
+                size="lg"
+                asChild
+                className="text-lg font-bold"
+              >
+                <Link to={e.to}>{e.label}</Link>
+              </Button>
+            </li>
+          ))}
         </ul>
       </nav>
     </main>
