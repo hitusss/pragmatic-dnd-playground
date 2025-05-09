@@ -1,5 +1,6 @@
 {
   "name": "pragmatic-dnd-playground",
+  "license": "MIT",
   "private": true,
   "type": "module",
   "scripts": {
