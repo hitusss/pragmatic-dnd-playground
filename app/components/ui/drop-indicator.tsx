@@ -31,7 +31,7 @@ export function DropIndicator({
         } as React.CSSProperties
       }
       className={cn(
-        `bg-blue-700 before:bg-blue-700`,
+        `bg-primary before:bg-primary`,
         `pointer-events-none absolute z-10 rounded-xl`,
         `before:absolute before:size-(--drop-indicator-terminal-size) before:rounded-full before:content-['']`,
         {
