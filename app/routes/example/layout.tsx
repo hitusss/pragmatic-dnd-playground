@@ -11,7 +11,7 @@ import { exampleRoutes } from "~/constants";
 
 export default function ExampleLayout() {
   return (
-    <div className="flex h-dvh flex-col">
+    <div className="grid h-dvh">
       <header className="bg-accent text-accent-foreground flex h-16 w-full items-center justify-between border-b-2 px-6">
         <span className="text-2xl font-bold">
           Pragmatic Drag and Drop Playground
