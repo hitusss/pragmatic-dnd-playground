@@ -107,7 +107,7 @@ function Task({ task }: { task: ITask }) {
       dropTargetForElements({
         element,
         canDrop({ source }) {
-          if (source.element === dragHandle) {
+          if (source.element === element) {
             return false;
           }
           return isTaskData(source.data);
