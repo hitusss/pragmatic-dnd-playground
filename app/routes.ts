@@ -11,6 +11,7 @@ export default [
   ...prefix("example", [
     layout("routes/example/layout.tsx", [
       route("list", "routes/example/list.tsx"),
+      route("board", "routes/example/board.tsx"),
     ]),
   ]),
 ] satisfies RouteConfig;
