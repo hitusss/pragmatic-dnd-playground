@@ -12,6 +12,7 @@ export default [
     layout("routes/example/layout.tsx", [
       route("list", "routes/example/list.tsx"),
       route("board", "routes/example/board.tsx"),
+      route("tree", "routes/example/tree.tsx"),
     ]),
   ]),
 ] satisfies RouteConfig;

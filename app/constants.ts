@@ -7,4 +7,8 @@ export const exampleRoutes = [
     label: "Board",
     to: "/example/board",
   },
+  {
+    label: "Tree",
+    to: "/example/tree",
+  },
 ];
