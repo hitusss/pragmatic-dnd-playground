@@ -1,30 +1,27 @@
-import { createPortal } from "react-dom";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { de, faker } from "@faker-js/faker";
-import { GripVertical } from "lucide-react";
-
-import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
-import { reorder } from "@atlaskit/pragmatic-drag-and-drop/reorder";
+import type { Edge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
+import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import {
-  monitorForElements,
-  draggable,
-  dropTargetForElements,
-} from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview";
-import { pointerOutsideOfPreview } from "@atlaskit/pragmatic-drag-and-drop/element/pointer-outside-of-preview";
-
-import {
-  type Edge,
   attachClosestEdge,
   extractClosestEdge,
 } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 import { getReorderDestinationIndex } from "@atlaskit/pragmatic-drag-and-drop-hitbox/util/get-reorder-destination-index";
 
-import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
+import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
+import {
+  draggable,
+  dropTargetForElements,
+  monitorForElements,
+} from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
+import { reorder } from "@atlaskit/pragmatic-drag-and-drop/reorder";
 
-import { cn } from "~/lib/utils";
+import { faker } from "@faker-js/faker";
+import { GripVertical } from "lucide-react";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+
 import { Button } from "~/components/ui/button";
 import { DropIndicator } from "~/components/ui/drop-indicator";
+import { cn } from "~/lib/utils";
 
 const INITIAL_COLUMS: IBoard["columns"] = Array.from(
   { length: faker.number.int({ min: 4, max: 12 }) },
@@ -219,7 +216,10 @@ function Task({ task }: { task: ITask }) {
           >
             <div>
               <GripVertical />
-              <span className="sr-only">Reorder: {task.content}</span>
+              <span className="sr-only">
+                Reorder:
+                {task.content}
+              </span>
             </div>
           </Button>
           <p>{task.content}</p>
@@ -341,7 +341,7 @@ function Column({
         canScroll: ({ source }) => isTaskData(source.data),
       }),
     );
-  }, []);
+  }, [column]);
 
   return (
     <div ref={ref} className="relative flex">
@@ -363,7 +363,10 @@ function Column({
           >
             <div>
               <GripVertical />
-              <span className="sr-only">Reorder: {column.title}</span>
+              <span className="sr-only">
+                Reorder:
+                {column.title}
+              </span>
             </div>
           </Button>
           <p>{column.title}</p>
@@ -383,7 +386,7 @@ function Column({
 }
 
 export default function BoeadExample() {
-  const [data, setData] = useState<IBoard>();
+  const [data, setData] = useState<IBoard>(INITIAL_BORAD);
   const ref = useRef<HTMLDivElement>(null);
 
   const reorderColumn = useCallback(
@@ -498,10 +501,6 @@ export default function BoeadExample() {
     },
     [],
   );
-
-  useEffect(() => {
-    setData(INITIAL_BORAD);
-  }, []);
 
   useEffect(() => {
     if (!data) return;
@@ -620,13 +619,12 @@ export default function BoeadExample() {
                 finishColumnId: destinationColumn.id,
                 itemIndexInFinishColumn: destinationIndex,
               });
-              return;
             }
           }
         },
       }),
     );
-  }, [data]);
+  }, [data, moveTask, reorderColumn, reorderTask]);
 
   useEffect(() => {
     const element = ref.current;

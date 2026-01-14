@@ -1,32 +1,34 @@
-import { createPortal } from "react-dom";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { faker } from "@faker-js/faker";
-import { GripVertical } from "lucide-react";
-
-import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
-import { reorder } from "@atlaskit/pragmatic-drag-and-drop/reorder";
+import type { Edge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
+import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import {
-  monitorForElements,
-  draggable,
-  dropTargetForElements,
-} from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview";
-import { pointerOutsideOfPreview } from "@atlaskit/pragmatic-drag-and-drop/element/pointer-outside-of-preview";
-
-import {
-  type Edge,
   attachClosestEdge,
   extractClosestEdge,
 } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 import { getReorderDestinationIndex } from "@atlaskit/pragmatic-drag-and-drop-hitbox/util/get-reorder-destination-index";
+import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 
-import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
+import {
+  draggable,
+  dropTargetForElements,
+  monitorForElements,
+} from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
+import { pointerOutsideOfPreview } from "@atlaskit/pragmatic-drag-and-drop/element/pointer-outside-of-preview";
+import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview";
+import { reorder } from "@atlaskit/pragmatic-drag-and-drop/reorder";
+import { faker } from "@faker-js/faker";
 
-import { cn } from "~/lib/utils";
+import { GripVertical } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+import { createPortal } from "react-dom";
+
 import { Button } from "~/components/ui/button";
 import { DropIndicator } from "~/components/ui/drop-indicator";
+import { cn } from "~/lib/utils";
 
-const INITIAL_TASKS = new Array(faker.number.int({ min: 24, max: 36 }))
+const INITIAL_TASKS = Array.from({
+  length: faker.number.int({ min: 24, max: 36 }),
+})
   .fill(null)
   .map((_, i) => ({
     id: String(i),
@@ -168,7 +170,10 @@ function Task({ task }: { task: ITask }) {
             >
               <div>
                 <GripVertical />
-                <span className="sr-only">Reorder: {task.content}</span>
+                <span className="sr-only">
+                  Reorder:
+                  {task.content}
+                </span>
               </div>
             </Button>
             <p>{task.content}</p>
@@ -191,7 +196,7 @@ function Task({ task }: { task: ITask }) {
 }
 
 export default function ListExample() {
-  const [tasks, setTasks] = useState<ITask[]>([]);
+  const [tasks, setTasks] = useState<ITask[]>(INITIAL_TASKS);
   const ref = useRef<HTMLDivElement>(null);
 
   const reorderTask = useCallback(
@@ -225,10 +230,6 @@ export default function ListExample() {
     },
     [],
   );
-
-  useEffect(() => {
-    setTasks(INITIAL_TASKS);
-  }, []);
 
   useEffect(() => {
     return monitorForElements({
@@ -267,7 +268,7 @@ export default function ListExample() {
         });
       },
     });
-  }, [tasks]);
+  }, [reorderTask, tasks]);
 
   useEffect(() => {
     const element = ref.current;
