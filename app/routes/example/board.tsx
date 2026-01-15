@@ -61,32 +61,32 @@ const INITIAL_BORAD: IBoard = {
 const COLUMN_KEY = Symbol("column");
 const TASK_KEY = Symbol("task");
 
-interface ITask {
+interface IBoardTask {
   id: string;
   content: string;
-  columnId: IColumn["id"];
+  columnId: IBoardColumn["id"];
 }
 
-interface IColumn {
+interface IBoardColumn {
   id: string;
   title: string;
-  itemIds: ITask["id"][];
+  itemIds: IBoardTask["id"][];
 }
 
 interface IBoard {
-  columns: Record<IColumn["id"], IColumn>;
-  tasks: Record<ITask["id"], ITask>;
-  columnOrder: IColumn["id"][];
+  columns: Record<IBoardColumn["id"], IBoardColumn>;
+  tasks: Record<IBoardTask["id"], IBoardTask>;
+  columnOrder: IBoardColumn["id"][];
 }
 
-interface ITaskData extends Record<string | symbol, unknown> {
+interface IBoardTaskData extends Record<string | symbol, unknown> {
   [TASK_KEY]: true;
-  task: ITask;
+  task: IBoardTask;
 }
 
-interface IColumnData extends Record<string | symbol, unknown> {
+interface IBoardColumnData extends Record<string | symbol, unknown> {
   [COLUMN_KEY]: true;
-  column: IColumn;
+  column: IBoardColumn;
 }
 
 type TTaskState =
@@ -100,18 +100,20 @@ type TColumnState =
   | { type: "dragging-over"; closestEdge: Edge | null }
   | { type: "dragging-task-over" };
 
-function getTaskData({ task }: { task: ITask }): ITaskData {
+function getTaskData({ task }: { task: IBoardTask }): IBoardTaskData {
   return {
     [TASK_KEY]: true,
     task,
   };
 }
 
-function isTaskData(data: Record<string | symbol, unknown>): data is ITaskData {
+function isTaskData(
+  data: Record<string | symbol, unknown>,
+): data is IBoardTaskData {
   return data[TASK_KEY] === true;
 }
 
-function getColumnData({ column }: { column: IColumn }): IColumnData {
+function getColumnData({ column }: { column: IBoardColumn }): IBoardColumnData {
   return {
     [COLUMN_KEY]: true,
     column,
@@ -120,11 +122,11 @@ function getColumnData({ column }: { column: IColumn }): IColumnData {
 
 function isColumnData(
   data: Record<string | symbol, unknown>,
-): data is IColumnData {
+): data is IBoardColumnData {
   return data[COLUMN_KEY] === true;
 }
 
-function Task({ task }: { task: ITask }) {
+function Task({ task }: { task: IBoardTask }) {
   const [state, setState] = useState<TTaskState>({
     type: "idle",
   });
@@ -236,7 +238,7 @@ function Column({
   column,
   children,
 }: {
-  column: IColumn;
+  column: IBoardColumn;
   children?: React.ReactNode;
 }) {
   const [state, setState] = useState<TColumnState>({

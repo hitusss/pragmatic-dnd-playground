@@ -37,14 +37,14 @@ const INITIAL_TASKS = Array.from({
 
 const TASK_KEY = Symbol("task");
 
-interface ITask {
+interface IListTask {
   id: string;
   content: string;
 }
 
-interface ITaskData extends Record<string | symbol, unknown> {
+interface IListTaskData extends Record<string | symbol, unknown> {
   [TASK_KEY]: true;
-  task: ITask;
+  task: IListTask;
 }
 
 type TTaskState =
@@ -53,18 +53,20 @@ type TTaskState =
   | { type: "dragging" }
   | { type: "dragging-over"; closestEdge: Edge | null };
 
-function getTaskData({ task }: { task: ITask }): ITaskData {
+function getTaskData({ task }: { task: IListTask }): IListTaskData {
   return {
     [TASK_KEY]: true,
     task,
   };
 }
 
-function isTaskData(data: Record<string | symbol, unknown>): data is ITaskData {
+function isTaskData(
+  data: Record<string | symbol, unknown>,
+): data is IListTaskData {
   return data[TASK_KEY] === true;
 }
 
-function Task({ task }: { task: ITask }) {
+function Task({ task }: { task: IListTask }) {
   const [state, setState] = useState<TTaskState>({
     type: "idle",
   });
@@ -196,7 +198,7 @@ function Task({ task }: { task: ITask }) {
 }
 
 export default function ListExample() {
-  const [tasks, setTasks] = useState<ITask[]>(INITIAL_TASKS);
+  const [tasks, setTasks] = useState<IListTask[]>(INITIAL_TASKS);
   const ref = useRef<HTMLDivElement>(null);
 
   const reorderTask = useCallback(
